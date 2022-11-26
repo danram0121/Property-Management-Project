@@ -37,6 +37,22 @@ input{
     opacity: 90%;
 }
 
+.support-head{
+    height: 1500px;
+    background-image: url(/images/support.jpg);
+    background-size:cover;
+    background-repeat: no-repeat;
+    opacity: 90%;
+}
+
+.about-head{
+    height: 1500px;
+    background-image: url(/images/we-about.jpg);
+    background-size:cover;
+    background-repeat: no-repeat;
+    opacity: 90%;
+}
+
 .scale{
     transition: all 0.3s ease-in-out;
 }
