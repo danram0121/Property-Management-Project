@@ -7,6 +7,11 @@
     <title>Happy Citizen Property Management System - Dashboard</title>
     <!-- Stylesheet-->
     <link rel="stylesheet" href="../stylesheets/main.css" />
+    <!-- Add icon library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <!-- Latest compiled and minified CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
@@ -17,15 +22,13 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="container-fluid">
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <a href="../index.html" class="nav-link">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="../common/about.html" class="nav-link">About</a>
-          </li>
-          <li class="nav-item">
-            <a href="../common/contact.html" class="nav-link">Contact</a>
-          </li>
+          <a href="#"
+            ><img
+              src="/images/HC.svg"
+              width="32"
+              alt="HC Logo"
+              class="navbar-brand"
+          /></a>
         </ul>
         <div class="dropdown">
           <a
@@ -36,15 +39,22 @@
           >
             <img
               src="https://github.com/mdo.png"
-              alt="userIcon"
+              alt=""
               width="32"
               height="32"
               class="rounded-circle me-2"
             />
-            <div id="loginFullName" name="loginFullName">Name Here</div>
+            <!--Username goes Here -->
+            <strong>Daniel Ramirez</strong>
           </a>
           <ul
-            class="dropdown-menu dropdown-menu-dark text-small drops shadow d"
+            class="dropdown-menu dropdown-menu-dark text-small shadow"
+            style="
+              position: absolute;
+              inset: 0px auto auto 0px;
+              margin: 0px;
+              transform: translate(0px, 34px);
+            "
           >
             <li>
               <a class="dropdown-item" href="dashboard.html">Dashboard</a>
@@ -53,13 +63,33 @@
               <a class="dropdown-item" href="settings_personal.html">Profile</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="../index.html">Sign out</a></li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
           </ul>
         </div>
       </div>
     </nav>
-    <div class="main-container d-flex">
-      <div class="content">
+    <!-- End of Navbar -->
+    <main class="m-5">
+      <h1 class="container-fluid border-bottom">Dashboard</h1>
+      <div class="container-fluid m-3 pt-4">
+        <div class="card" style="width: 18rem">
+          <img src="..." class="card-img-top bg-dark bg-opacity-50
+          " alt="doc preview" style="height: 200px;" />
+          <div class="card-body">
+            <h5 class="doc-name">doc_example.pdf</h5>
+            <p class="card-text">
+              owner: 
+            </p>
+            <div class="text-end">
+              <button class="btn bg-primary"><i class="fa fa-arrow-down text-white"></i></button>
+              <button class="btn bg-primary"><i class="fa fa-share text-white"></i></button>
+              <button class="btn bg-danger"><i class="fa fa-trash text-white"></i></button>
+            </div>
+            
+          </div>
+        </div>
+        </div>
+
         <label for="propertyName">Enter Property Name to Add: </label
         ><input
           type="text"
@@ -162,7 +192,7 @@
         <div id="propertySharedWithList" name="propertySharedWithList"></div>
         <br />
       </div>
-    </div>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../scripts/main.js"></script>
   </body>
