@@ -221,10 +221,10 @@ webSqlApp = {
                           alert("No Properties Shared");
                         }
                         else{
-                          document.getElementById('propertyList').innerHTML = "";
+                          document.getElementById('sharedPropertyList').innerHTML = "";
 
                           for (let i = 0; i < results.rows.length; i++) {
-                            document.getElementById('propertyList').innerHTML +=
+                            document.getElementById('sharedPropertyList').innerHTML +=
                             "<b>User </b>" +
                             results.rows.item(i).username +
                             "<b> is Sharing Property ID: </b>" +
