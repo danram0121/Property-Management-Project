@@ -69,6 +69,7 @@
         <div class="h1 d-flex w-100">Dashboard</div>
         <div class="flex-shrink-0 ">
           <!-- Add Property Name -->
+          <div id="addPropertyFields">
           <label for="propertyName" class="label">Enter Property Name to Add: </label>
           <input
               type="text"
@@ -80,9 +81,10 @@
             <button id="btnAddProperty" class="btn btn-primary">
               <i class="fa fa-plus "></i>
             </button>
-            <button id="btnWriteFile" class="btn btn-primary">
-              Download
-            </button>
+          </div>
+            <textarea style = "display: none" id="textbox">Type something here</textarea>
+            <button id="btnWriteFile" class="btn btn-secondary">Create Download Link</button>
+            <a download="propertyList.txt" id="downloadlink" style="display: none">Download</a>
         </div>
       </div>
 
@@ -140,61 +142,65 @@
           </div>
           <div  id="sharedPropertyList" name="sharedPropertyList"></div>
           <br>
-          <!-- Share Property -->
-          <label for="sharedPropertyID" class="label">Enter Property ID to Share: </label>
-          <input
-            type="text"
-            name="sharedPropertyID"
-            id="sharedPropertyID"
-            placeholder="Property ID"
-          />
-          <label for="sharedPropertyUser" class="label">Enter Username to Share Property With: </label>
-          <input
-            type="text"
-            name="sharedPropertyUser"
-            id="sharedPropertyUser"
-            placeholder="Shared Username"
-          />
-          <button id="btnShareProperty" class="btn btn-primary">Share Property</button>
+          <div id="shareFields">
+            <!-- Share Property -->
+            <label for="sharedPropertyID" class="label">Enter Property ID to Share: </label>
+            <input
+              type="text"
+              name="sharedPropertyID"
+              id="sharedPropertyID"
+              placeholder="Property ID"
+            />
+            <label for="sharedPropertyUser" class="label">Enter Username to Share Property With: </label>
+            <input
+              type="text"
+              name="sharedPropertyUser"
+              id="sharedPropertyUser"
+              placeholder="Shared Username"
+            />
+            <button id="btnShareProperty" class="btn btn-primary">Share Property</button>
+          </div>
 
           <!-- Header Properties Shared with User -->
-          <div class="container-fluid d-flex border-bottom mt-4">
-            <h4 class="w-100 d-flex">Below is a list of the properties that are shared with you</h2>
-            <div class="flex-shrink-0">
-              <button id="btnViewPropertySharedWith" class="btn btn-secondary mb-2">List Property Shared With You <i class="ms-2 fa fa-list"></i></button>
+          <div id="sharedWithFields">
+            <div class="container-fluid d-flex border-bottom mt-4">
+              <h4 class="w-100 d-flex">Below is a list of the properties that are shared with you</h2>
+              <div class="flex-shrink-0">
+                <button id="btnViewPropertySharedWith" class="btn btn-secondary mb-2">List Property Shared With You <i class="ms-2 fa fa-list"></i></button>
+              </div>
             </div>
-          </div>
-          <div  id="sharedPropertyList" name="sharedPropertyList" ></div>
-          <br />
-          <label for="updateSharedPropertyID" class="label">Enter Shared Property ID to Update: </label>
-          <input
-            type="text"
-            name="updateSharedPropertyID"
-            id="updateSharedPropertyID"
-            placeholder="Shared Property ID"
-          />
-          <label for="updateSharedPropertyName" class="label">Enter New Shared Property Name: </label>
-          <input
-            type="text"
-            name="updateSharedPropertyName"
-            id="updateSharedPropertyName"
-            placeholder="New Property Name"
-          />
-          <button id="btnUpdateSharedProperty" class="btn btn-primary">Update Property</button
-          ><br /><br />
-          <label for="deleteSharedPropertyID" class="label">Enter Shared Property ID to Delete: </label>
-          <input
-            type="text"
-            name="deleteSharedPropertyID"
-            id="deleteSharedPropertyID"
-            placeholder="Property ID"
-          />
-          <button id="btnDeleteSharedProperty" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-          <br /><br />
+            <div  id="sharedPropertyList" name="sharedPropertyList" ></div>
+            <br />
+            <label for="updateSharedPropertyID" class="label">Enter Shared Property ID to Update: </label>
+            <input
+              type="text"
+              name="updateSharedPropertyID"
+              id="updateSharedPropertyID"
+              placeholder="Shared Property ID"
+            />
+            <label for="updateSharedPropertyName" class="label">Enter New Shared Property Name: </label>
+            <input
+              type="text"
+              name="updateSharedPropertyName"
+              id="updateSharedPropertyName"
+              placeholder="New Property Name"
+            />
+            <button id="btnUpdateSharedProperty" class="btn btn-primary">Update Property</button
+            ><br /><br />
+            <label for="deleteSharedPropertyID" class="label">Enter Shared Property ID to Delete: </label>
+            <input
+              type="text"
+              name="deleteSharedPropertyID"
+              id="deleteSharedPropertyID"
+              placeholder="Property ID"
+            />
+            <button id="btnDeleteSharedProperty" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+            <br /><br />
 
-          <br />
-          <div id="propertySharedWithList" name="propertySharedWithList"></div>
-          <br />
+            <br />
+            <div id="propertySharedWithList" name="propertySharedWithList"></div>
+            <br />
+          </div>
         </div>
 
     </main>

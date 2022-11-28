@@ -104,6 +104,7 @@
       <main class="m-3 p-5 container-fluid">
         <div class="mb-5 h1 text-center">Share access to your account here</div>
         <div class="mb-3 text-black">
+          <div id="shareAccessFields">
           <h6 class="mb-3 pb-3 border-bottom">
             Below add the email of the user you would like to share access to.
           </h6>
@@ -119,6 +120,7 @@
             </div>
             <button id="btnShareAccess" type="submit" class="btn btn-primary mb-2">Submit</button>
           </div>
+          </div>
           <div class="container-fluid d-flex border-bottom mt-4">
             <h6  class="w-100 d-flex">Below are the users you have shared access to.</h6>
             <div class="flex-shrink-0">
@@ -127,17 +129,15 @@
                 List Shared Access <i class="ms-2 fa fa-list"></i>
               </button>
           </div>
-          <div  id="shareAccessList" name="shareAccessList" ></div>
         </div>
+        <div  id="shareAccessList" name="shareAccessList" ></div>
           <div>
-            <div id="shareAccessList" name="shareAccessList"></div>
             <div class="d-flex ps-5 ">
               <div class="form-group me-2">
                 <input
                   type="email"
-                  class="form-control form-control-plaintext ps-2"
+                  class="form-control"
                   id="emailRemoveAccess"
-                  readonly
                   placeholder="name@example.com"
                   style="width: 300px"
                 />
