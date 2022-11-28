@@ -338,7 +338,7 @@ webSqlApp = {
                           document.getElementById('shareAccessList').innerHTML = "";
                           for (let i = 0; i < results.rows.length; i++) {
                             document.getElementById('shareAccessList').innerHTML +=
-                            results.rows.item(i).sharedUser +
+                            results.rows.item(i).username +
                             "\n<br>";
                           }
                         }
