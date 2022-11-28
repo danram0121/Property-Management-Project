@@ -18,7 +18,7 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body onload="personalOnLoad()">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="container-fluid">
@@ -40,7 +40,7 @@
           >
           <i class="fa fa-user m-3 "></i>
           <!--Username goes Here -->
-          <strong>Username</strong>
+          <div id="loginFullName" name="loginFullName">Name Here</div>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-dark text-small shadow"
@@ -58,7 +58,7 @@
               <a class="dropdown-item" href="settings_personal.html">Profile</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
+            <li><a class="dropdown-item" href="index.html">Sign out</a></li>
           </ul>
         </div>
       </div>
@@ -70,7 +70,7 @@
         class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
         style="width: 280px"
       >
-        
+
           <span class="fs-4 mb-2 ps-5">Preferences</span>
         </a>
         <hr />
@@ -99,25 +99,25 @@
       <!-- Main -->
       <div class="container-fluid text-center mx-auto mt-5">
         <!-- Possible User Icon with initials -->
-        <div class="justify-content-center d-flex"> 
-          <div class="rounded-circle bg-dark text-white d-flex justify-content-center" style="height: 200px; width:200px"> 
+        <div class="justify-content-center d-flex">
+          <div class="rounded-circle bg-dark text-white d-flex justify-content-center" style="height: 200px; width:200px">
           <!-- Import first initial within div tags below -->
           <div class="align-self-center m-1" style="font-size: 100px;">F</div>
-          <div class="align-self-center m-1" style="font-size: 100px;">L</div> 
+          <div class="align-self-center m-1" style="font-size: 100px;">L</div>
         </div></div>
-        
+
         <div class="spacer"></div>
         <!-- User Full Name to be imported -->
         <div class="text-center mb-3 d-flex justify-content-center">
           <p class="h5 me-3">Full Name:</p>
           <!-- Import First and Last names within strong tags -->
-          <p class="h5"><strong>First Name</strong>  <strong>Last Name</strong></p>
+          <p id="loginScreenFullName" class="h5"><strong>First Name</strong>  <strong>Last Name</strong></p>
         </div>
         <!-- User Email to be imported-->
         <div class="mb-3 d-flex justify-content-center">
           <p class="h5 me-3">Email: </p>
           <!-- Import email within strong tags -->
-          <p class="h5"><strong>user@example.com</strong></p>
+          <p id="loginEmail" class="h5"><strong>user@example.com</strong></p>
         </div>
       </div>
       <!-- Main End -->

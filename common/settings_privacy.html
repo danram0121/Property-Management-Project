@@ -18,7 +18,7 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body onload="privacyOnLoad()">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="container-fluid">
@@ -40,7 +40,7 @@
           >
             <i class="fa fa-user m-3 "></i>
             <!--Username goes Here -->
-            <strong>Username</strong>
+            <div id="loginFullName" name="loginFullName">Name Here</div>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-dark text-small shadow"
@@ -58,7 +58,7 @@
               <a class="dropdown-item" href="settings_personal.html">Profile</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
+            <li><a class="dropdown-item" href="index.html">Sign out</a></li>
           </ul>
         </div>
       </div>
@@ -70,7 +70,7 @@
         class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
         style="width: 280px"
       >
-        
+
           <span class="fs-4 mb-2 ps-5">Preferences</span>
         </a>
         <hr />
@@ -81,19 +81,19 @@
               class="nav-link text-white"
               aria-current="page"
             >
-             
+
               Personal Info
             </a>
           </li>
           <li>
             <a href="settings_security.html" class="nav-link text-white">
-              
+
               Account Security
             </a>
           </li>
           <li>
             <a href="settings_privacy.html" class="nav-link active text-white">
-              
+
               Privacy Controls
             </a>
           </li>
@@ -107,7 +107,7 @@
           <h6 class="mb-3 pb-3 border-bottom">
             Below add the email of the user you would like to share access to.
           </h6>
-          <form class="d-flex ps-5">
+          <div class="d-flex ps-5">
             <div class="form-group me-2">
               <input
                 type="email"
@@ -117,24 +117,33 @@
                 style="width: 300px"
               />
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Submit</button>
-          </form>
-          <div class="container-fluid border-bottom mt-3 mb-3"></div>
+            <button id="btnShareAccess" type="submit" class="btn btn-primary mb-2">Submit</button>
+          </div>
+          <div class="container-fluid d-flex border-bottom mt-4">
+            <h6  class="w-100 d-flex">Below are the users you have shared access to.</h6>
+            <div class="flex-shrink-0">
+              <!-- List Shared Property -->
+              <button id="btnViewShareAccess" class="btn btn-secondary mb-2">
+                List Shared Access <i class="ms-2 fa fa-list"></i>
+              </button>
+          </div>
+          <div  id="shareAccessList" name="shareAccessList" ></div>
+        </div>
           <div>
-            <h6 class="mb-3 pb-3 border-bottom">Below are the users you have shared access to.</h6>
-            <form class="d-flex ps-5 ">
+            <div id="shareAccessList" name="shareAccessList"></div>
+            <div class="d-flex ps-5 ">
               <div class="form-group me-2">
                 <input
                   type="email"
                   class="form-control form-control-plaintext ps-2"
-                  id="emailShareAccess"
+                  id="emailRemoveAccess"
                   readonly
                   placeholder="name@example.com"
                   style="width: 300px"
                 />
               </div>
-              <button type="submit" class="btn btn-danger mb-2">Delete</button>
-            </form>
+              <button id="btnRemoveAccess" type="submit" class="btn btn-danger mb-2">Delete</button>
+            </div>
             <div class="container-fluid border-bottom mt-3 mb-3"></div>
           </div>
         </div>

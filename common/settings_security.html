@@ -18,7 +18,7 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body onload="securityOnLoad()">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="container-fluid">
@@ -40,7 +40,7 @@
           >
           <i class="fa fa-user m-3 "></i>
           <!--Username goes Here -->
-          <strong>Username</strong>
+          <div id="loginFullName" name="loginFullName">Name Here</div>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-dark text-small shadow"
@@ -58,7 +58,7 @@
               <a class="dropdown-item" href="settings_personal.html">Profile</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
+            <li><a class="dropdown-item" href="index.html">Sign out</a></li>
           </ul>
         </div>
       </div>
@@ -70,7 +70,7 @@
         class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
         style="width: 280px"
       >
-       
+
           <span class="fs-4 mb-2 ps-5">Preferences</span>
         </a>
         <hr />
@@ -81,19 +81,19 @@
               class="nav-link text-white"
               aria-current="page"
             >
-              
+
               Personal Info
             </a>
           </li>
           <li>
             <a href="settings_security.html" class="nav-link active text-white">
-              
+
               Account Security
             </a>
           </li>
           <li>
             <a href="settings_privacy.html" class="nav-link text-white">
-             
+
               Privacy Controls
             </a>
           </li>
@@ -101,10 +101,10 @@
       </div>
       <!-- Sidebar End -->
       <!-- Main -->
-      
+
       <!-- User Email to be imported-->
       <div class="mb-3 d-flex justify-content-center">
-        
+
       </div>
 
       <main class="text-center mx-auto my-5 p-3">
@@ -114,11 +114,11 @@
           <p class="h5 me-3">Password: </p>
           <p class="h5"><strong>*********</strong></p>
         </div>
-        
+
         <!-- Form to Change User Password -->
-        <form class="shadow-lg rounded p-3 m-5  justify-content-center">
+        <div class="shadow-lg rounded p-3 m-5  justify-content-center">
           <h4 class="mt-3">Change your password</h4>
-          <div class="p-5 mx-5 text-end"> 
+          <div class="p-5 mx-5 text-end">
             <div class="mb-3"><label for="currentPassword" class="label">Enter Current Password: </label>
               <input
                 type="password"
@@ -149,8 +149,8 @@
             </div>
           </div>
           <button id="btnChangePassword" class="btn btn-primary mb-4">Change Password</button>
-        </form>
-        
+        </div>
+
       </main>
       <!-- Main End -->
     </div>
