@@ -326,8 +326,9 @@ webSqlApp = {
                     });
               }
               else{
-                t.executeSql('SELECT * FROM shareAccess',
-                    [],
+                username = results.rows.item(0).username;
+                t.executeSql('SELECT * FROM shareAccess WHERE sharedUser = ?',
+                    [username],
                     function (transaction, results) {
                         if(results.rows.length == 0){
                           document.getElementById('shareAccessList').innerHTML = "";
