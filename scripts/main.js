@@ -162,6 +162,7 @@ webSqlApp = {
                     [],
                     function (transaction, results) {
                         if(results.rows.length == 0){
+                          document.getElementById('propertyList').innerHTML = "";
                           alert("No Properties Saved");
                         }
                         else{
@@ -186,6 +187,7 @@ webSqlApp = {
                     [username],
                     function (transaction, results) {
                         if(results.rows.length == 0){
+                          document.getElementById('propertyList').innerHTML = "";
                           alert("You have no Properties Saved");
                         }
                         else{
@@ -218,6 +220,7 @@ webSqlApp = {
                     [],
                     function (transaction, results) {
                         if(results.rows.length == 0){
+                          document.getElementById('sharedPropertyList').innerHTML = "";
                           alert("No Properties Shared");
                         }
                         else{
@@ -243,6 +246,7 @@ webSqlApp = {
                     function (transaction, results) {
                         if(results.rows.length == 0){
                           alert("You are not Sharing Any Properties");
+                          document.getElementById('sharedPropertyList').innerHTML = "";
                         }
                         else{
                           document.getElementById('sharedPropertyList').innerHTML = "";
@@ -273,6 +277,7 @@ webSqlApp = {
                   [username],
                   function (transaction, results) {
                       if(results.rows.length == 0){
+                        document.getElementById('propertySharedWithList').innerHTML = "";
                         alert("No Properties Shared With You");
                       }
                       else{
@@ -304,6 +309,7 @@ webSqlApp = {
                     [],
                     function (transaction, results) {
                         if(results.rows.length == 0){
+                          document.getElementById('shareAccessList').innerHTML = "";
                           alert("No Accounts are Sharing Access");
                         }
                         else{
@@ -324,6 +330,7 @@ webSqlApp = {
                     [],
                     function (transaction, results) {
                         if(results.rows.length == 0){
+                          document.getElementById('shareAccessList').innerHTML = "";
                           alert("You are not Sharing Account Access");
                         }
                         else{
@@ -672,6 +679,7 @@ webSqlApp = {
                     [],
                     function (transaction, results) {
                       if(results.rows.length == 0){
+                        document.getElementById('viewRequests').innerHTML = "";
                         alert("No Requests Submitted");
                       }
                       else{
@@ -697,6 +705,7 @@ webSqlApp = {
                     [username],
                     function (transaction, results) {
                       if(results.rows.length == 0){
+                        document.getElementById('viewRequests').innerHTML = "";
                         alert("No Requests Submitted");
                       }
                       else{
