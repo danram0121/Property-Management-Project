@@ -764,7 +764,8 @@ webSqlApp = {
 
         document.getElementById('textbox').value = document.getElementById('propertyList').textContent +
         document.getElementById('sharedPropertyList').textContent +
-        document.getElementById('propertySharedWithList').textContent;
+        document.getElementById('propertySharedWithList').textContent +
+        document.getElementById('viewRequests').textContent;
         var create = document.getElementById('btnWriteFile'),
           textbox = document.getElementById('textbox');
 
