@@ -688,7 +688,8 @@ webSqlApp = {
                           results.rows.item(i).status +
                           "\n<br>";
                       }
-                    });
+                    }
+                  });
               }
               else{
                 username = results.rows.item(0).username;
@@ -710,7 +711,8 @@ webSqlApp = {
                           results.rows.item(i).status +
                           "\n<br>";
                       }
-                    });
+                    }
+                  });
               }
             });
       }, this.onError, this.onSuccess('NoError'));
