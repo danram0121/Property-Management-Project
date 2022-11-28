@@ -38,15 +38,9 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img
-              src="https://github.com/mdo.png"
-              alt=""
-              width="32"
-              height="32"
-              class="rounded-circle me-2"
-            />
-            <!--Username goes Here -->
-            <strong>Daniel Ramirez</strong>
+          <i class="fa fa-user m-3 "></i>
+          <!--Username goes Here -->
+          <strong>Username</strong>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-dark text-small shadow"
@@ -103,28 +97,27 @@
         </ul>
       </div>
       <!-- Main -->
-      <div class="text-center mx-auto my-5">
-        <img
-          src="https://github.com/mdo.png"
-          alt=""
-          width="250"
-          height="250"
-          class="rounded-circle me-2"
-        />
+      <div class="container-fluid text-center mx-auto mt-5">
+        <!-- Possible User Icon with initials -->
+        <div class="justify-content-center d-flex"> 
+          <div class="rounded-circle bg-dark text-white d-flex justify-content-center" style="height: 200px; width:200px"> 
+          <!-- Import first initial within div tags below -->
+          <div class="align-self-center m-1" style="font-size: 100px;">F</div>
+          <div class="align-self-center m-1" style="font-size: 100px;">L</div> 
+        </div></div>
+        
         <div class="spacer"></div>
-        <div class="mb-3">
-          Full Name:
-
-          <button class="btn">
-            <i class="fa fa-pencil-square-o"></i>
-          </button>
+        <!-- User Full Name to be imported -->
+        <div class="text-center mb-3 d-flex justify-content-center">
+          <p class="h5 me-3">Full Name:</p>
+          <!-- Import First and Last names within strong tags -->
+          <p class="h5"><strong>First Name</strong>  <strong>Last Name</strong></p>
         </div>
-        <div class="mb-3">
-          Email:
-
-          <button class="btn">
-            <i class="fa fa-pencil-square-o"></i>
-          </button>
+        <!-- User Email to be imported-->
+        <div class="mb-3 d-flex justify-content-center">
+          <p class="h5 me-3">Email: </p>
+          <!-- Import email within strong tags -->
+          <p class="h5"><strong>user@example.com</strong></p>
         </div>
       </div>
       <!-- Main End -->

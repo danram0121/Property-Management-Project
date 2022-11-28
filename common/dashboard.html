@@ -37,15 +37,9 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img
-              src="https://github.com/mdo.png"
-              alt=""
-              width="32"
-              height="32"
-              class="rounded-circle me-2"
-            />
+            <i class="fa fa-user m-3 "></i>
             <!--Username goes Here -->
-            <strong>Daniel Ramirez</strong>
+            <strong>Username</strong>
           </a>
           <ul
             class="dropdown-menu dropdown-menu-dark text-small shadow"
@@ -68,130 +62,136 @@
         </div>
       </div>
     </nav>
-    <!-- End of Navbar -->
+    <!-- Dashboard -->    
     <main class="m-5">
-      <h1 class="container-fluid border-bottom">Dashboard</h1>
-      <div class="container-fluid m-3 pt-4">
-        <div class="card" style="width: 18rem">
-          <img src="..." class="card-img-top bg-dark bg-opacity-50
-          " alt="doc preview" style="height: 200px;" />
-          <div class="card-body">
-            <h5 class="doc-name">doc_example.pdf</h5>
-            <p class="card-text">
-              owner: 
-            </p>
-            <div class="text-end">
-              <button class="btn bg-primary"><i class="fa fa-arrow-down text-white"></i></button>
-              <button class="btn bg-primary"><i class="fa fa-share text-white"></i></button>
-              <button class="btn bg-danger"><i class="fa fa-trash text-white"></i></button>
-            </div>
-            
+      <!-- Dashboard Header -->
+      <div class="container-fluid d-flex border-bottom">
+        <div class="h1 d-flex w-100">Dashboard</div>
+        <div class="flex-shrink-0 "> 
+          <!-- Add Property Name -->
+          <label for="propertyName" class="label">Enter Property Name to Add: </label>
+          <input
+              type="text"
+              name="propertyName"
+              id="propertyName"
+              placeholder="Property Name"
+              required
+            />
+            <button id="btnAddProperty" class="btn btn-primary">
+              <i class="fa fa-plus "></i>
+            </button>
+        </div>      
+      </div>
+      
+      <div class="container-fluid mx-3 pt-4">
+        <!-- Header User Properties -->
+        <div id="propertyList" name="propertyList" class="container-fluid d-flex border-bottom">
+          <h4 class="mb-3 w-100 d-flex">Below is a list of the properties you have added</h4>
+          <div class="flex-shrink-0">
+            <button id="btnViewProperty" class="btn btn-secondary">
+              List Property <i class="ms-2 fa fa-list"></i>
+            </button>
           </div>
         </div>
+        <br>
+          <!-- Edit User Property Name using Property ID -->
+          <label for="updatePropertyID" class="label">Enter Property ID to Update: </label>
+          <input
+            type="text"
+            name="updatePropertyID"
+            id="updatePropertyID"
+            placeholder="Property ID"
+          />
+          <label for="updatePropertyName" class="label">Enter New Property Name: </label>
+          <input
+            type="text"
+            name="updatePropertyName"
+           id="updatePropertyName"
+           placeholder="New Property Name"
+          />
+          <button id="btnUpdateProperty" class="btn btn-primary">Update Property</button>
+          
+          
+          <br /><br />
+          <!-- Delete Property -->
+          <label for="deletePropertyID" class="label">Enter Property ID to Delete:</label>
+          <input
+            type="text"
+            name="deletePropertyID"
+            id="deletePropertyID"
+            placeholder="Property ID"
+          />
+          <button id="btnDeleteProperty" class="btn btn-danger">
+            <i class="fa fa-trash"></i>
+          </button>
+          <!-- Header List of User shared Properties -->
+          <div id="sharedPropertyList" name="sharedPropertyList" class="container-fluid d-flex border-bottom  mt-4">
+            <h4 class="w-100 d-flex">Below is a list of the properties that you are sharing</h2>
+            <div class="flex-shrink-0">
+              <!-- List Shared Property -->
+              <button id="btnViewSharedProperty" class="btn btn-secondary mb-2">
+                List Shared Property <i class="ms-2 fa fa-list"></i>
+              </button>
+            </div>
+          </div>
+          <br>
+          <!-- Share Property -->
+          <label for="sharedPropertyID" class="label">Enter Property ID to Share: </label>
+          <input
+            type="text"
+            name="sharedPropertyID"
+            id="sharedPropertyID"
+            placeholder="Property ID"
+          />
+          <label for="sharedPropertyUser" class="label">Enter Username to Share Property With: </label>
+          <input
+            type="text"
+            name="sharedPropertyUser"
+            id="sharedPropertyUser"
+            placeholder="Shared Username"
+          />
+          <button id="btnShareProperty" class="btn btn-primary">Share Property</button>
+          
+          <!-- Header Properties Shared with User -->
+          <div id="sharedPropertyList" name="sharedPropertyList" class="container-fluid d-flex border-bottom mt-4">
+            <h4 class="w-100 d-flex">Below is a list of the properties that are shared with you</h2>
+            <div class="flex-shrink-0">
+              <button id="btnViewPropertySharedWith" class="btn btn-secondary mb-2">List Property Shared With You <i class="ms-2 fa fa-list"></i></button>
+            </div>
+          </div>
+          <br />
+          <label for="updateSharedPropertyID" class="label">Enter Shared Property ID to Update: </label>
+          <input
+            type="text"
+            name="updateSharedPropertyID"
+            id="updateSharedPropertyID"
+            placeholder="Shared Property ID"
+          />
+          <label for="updateSharedPropertyName" class="label">Enter New Shared Property Name: </label>
+          <input
+            type="text"
+            name="updateSharedPropertyName"
+            id="updateSharedPropertyName"
+            placeholder="New Property Name"
+          />
+          <button id="btnUpdateSharedProperty" class="btn btn-primary">Update Property</button
+          ><br /><br />
+          <label for="deleteSharedPropertyID" class="label">Enter Shared Property ID to Delete: </label>
+          <input
+            type="text"
+            name="deleteSharedPropertyID"
+            id="deleteSharedPropertyID"
+            placeholder="Property ID"
+          />
+          <button id="btnDeleteSharedProperty" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+          <br /><br />
+          
+          <br />
+          <div id="propertySharedWithList" name="propertySharedWithList"></div>
+          <br />
         </div>
-
-        <label for="propertyName">Enter Property Name to Add: </label
-        ><input
-          type="text"
-          name="propertyName"
-          id="propertyName"
-          placeholder="Property Name"
-        /><br />
-        <button id="btnAddProperty" class="btn">
-          Add Property
-          <img
-            src="/images/file-plus.svg"
-            height="18"
-            width="18"
-            alt="Add Property"
-          /></button
-        ><br /><br />
-        <button id="btnViewProperty" class="btn">List Property</button
-        ><br /><br />
-        <div id="propertyList" name="propertyList"></div>
-        <br />
-        <label for="updatePropertyID">Enter Property ID to Update: </label
-        ><input
-          type="text"
-          name="updatePropertyID"
-          id="updatePropertyID"
-          placeholder="Property ID"
-        /><br />
-        <label for="updatePropertyName">Enter New Property Name: </label
-        ><input
-          type="text"
-          name="updatePropertyName"
-          id="updatePropertyName"
-          placeholder="New Property Name"
-        /><br />
-        <button id="btnUpdateProperty" class="btn">Update Property</button
-        ><br /><br />
-        <label for="deletePropertyID">Enter Property ID to Delete: </label
-        ><input
-          type="text"
-          name="deletePropertyID"
-          id="deletePropertyID"
-          placeholder="Property ID"
-        /><br />
-        <button id="btnDeleteProperty" class="btn">
-          Delete Property <img src="/images/trash3.svg" alt="delete" /></button
-        ><br /><br />
-        <label for="sharedPropertyID">Enter Property ID to Share: </label
-        ><input
-          type="text"
-          name="sharedPropertyID"
-          id="sharedPropertyID"
-          placeholder="Property ID"
-        /><br />
-        <label for="sharedPropertyUser"
-          >Enter Username to Share Property With: </label
-        ><input
-          type="text"
-          name="sharedPropertyUser"
-          id="sharedPropertyUser"
-          placeholder="Shared Username"
-        /><br />
-        <button id="btnShareProperty" class="btn">Share Property</button
-        ><br /><br />
-        <button id="btnViewSharedProperty" class="btn">
-          List Shared Property</button
-        ><br />
-        <div id="sharedPropertyList" name="sharedPropertyList"></div>
-        <br />
-        <label for="updateSharedPropertyID"
-          >Enter Shared Property ID to Update: </label
-        ><input
-          type="text"
-          name="updateSharedPropertyID"
-          id="updateSharedPropertyID"
-          placeholder="Shared Property ID"
-        /><br />
-        <label for="updateSharedPropertyName"
-          >Enter New Shared Property Name: </label
-        ><input
-          type="text"
-          name="updateSharedPropertyName"
-          id="updateSharedPropertyName"
-          placeholder="New Shared Property Name"
-        /><br />
-        <button id="btnUpdateSharedProperty" class="btn">Update Property</button
-        ><br /><br />
-        <label for="deleteSharedPropertyID"
-          >Enter Shared Property ID to Delete: </label
-        ><input
-          type="text"
-          name="deleteSharedPropertyID"
-          id="deleteSharedPropertyID"
-          placeholder="Property ID"
-        /><br />
-        <button id="btnDeleteSharedProperty" class="btn">Delete Property</button
-        ><br /><br />
-        <button id="btnViewPropertySharedWith" class="btn">
-          List Property With You</button
-        ><br />
-        <div id="propertySharedWithList" name="propertySharedWithList"></div>
-        <br />
       </div>
+      
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../scripts/main.js"></script>
