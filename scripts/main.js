@@ -634,6 +634,116 @@ webSqlApp = {
       }, this.onError, this.onSuccess('NoError'));
     },
 
+    submitRequest: function(propertyID){
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM property WHERE id = ? AND username =?',
+                  [propertyID, username],
+                  function (transaction, results) {
+                    if(results.rows.length == 0){
+                      alert("You do not Own this Property");
+                    }
+                    else{
+                      propertyName = results.rows.items(0).propertyName;
+                      status = "Pending";
+                      t.executeSql('INSERT INTO submitRequest(id, username, propertyName, status) VALUES(?, ?, ?, ?)',
+                          [propertyID, username, sharedUser, status],
+                          function (transaction, results) {
+                        });
+                      alert("Request Submitted");
+                    }
+                  });
+            });
+      }, this.onError, this.onSuccess('NoError'));
+    },
+
+    viewRequests: function(){
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM submitRequest',
+                    [],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("No Requests Submitted");
+                      }
+                      else{
+                        document.getElementById('viewRequests').innerHTML = "";
+                        for (let i = 0; i < results.rows.length; i++) {
+                          document.getElementById('viewRequests').innerHTML +=
+                          "<b>User <\b>" +
+                          results.rows.item(i).username +
+                          "<b> Submitted Request for Property ID </b>" +
+                          results.rows.item(i).id +
+                          "<b> Called </b>" +
+                          results.rows.item(i).propertyName +
+                          "<b> Current Status: </b>" +
+                          results.rows.item(i).status +
+                          "\n<br>";
+                      }
+                    });
+              }
+              else{
+                username = results.rows.item(0).username;
+                t.executeSql('SELECT * FROM submitRequest WHERE username = ?',
+                    [username],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("No Requests Submitted");
+                      }
+                      else{
+                        document.getElementById('viewRequests').innerHTML = "";
+                        for (let i = 0; i < results.rows.length; i++) {
+                          document.getElementById('viewRequests').innerHTML +=
+                          "<b>You Submitted Request for Property ID </b>" +
+                          results.rows.item(i).id +
+                          "<b> Called </b>" +
+                          results.rows.item(i).propertyName +
+                          "<b> Current Status: </b>" +
+                          results.rows.item(i).status +
+                          "\n<br>";
+                      }
+                    });
+              }
+            });
+      }, this.onError, this.onSuccess('NoError'));
+    },
+
+    acceptRequest: function(propertyID){
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM submitRequest',
+                    [],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("No Requests Submitted");
+                      }
+                      else{
+                        status = "Accepted";
+                        t.executeSql('UPDATE submitRequest SET status = ? WHERE id = ?',
+                            [status, propertyID]);
+                        alert("Request Accepted");
+                      }
+                    });
+              }
+              else{
+                alert("You do not have Access to this Function");
+              }
+            });
+      }, this.onError, this.onSuccess('NoError'));
+    },
+
     writeFile: function(){
       var textFile = null,
         makeTextFile = function (text) {
