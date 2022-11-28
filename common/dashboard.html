@@ -199,7 +199,26 @@
             />
             <button id="btnDeleteSharedProperty" class="btn btn-danger"><i class="fa fa-trash"></i></button>
             <br /><br />
-
+            <div class="container-fluid d-flex border-bottom  mt-4">
+              <h4 class="w-100 d-flex">Below is a list of requests you have made</h2>
+              <div class="flex-shrink-0">
+                <!-- List Shared Property -->
+                <button id="btnViewRequests" class="btn btn-secondary mb-2">
+                  List Requests <i class="ms-2 fa fa-list"></i>
+                </button>
+              </div>
+            </div>
+            <div  id="viewRequests" name="viewRequests"></div>
+            <br>
+            <label for="requestID" class="label">Enter Property ID to Send Request for: </label>
+            <input
+              type="text"
+              name="requestID"
+              id="requestID"
+              placeholder="Request Property ID"
+            />
+            <button id="btnSubmitRequest" class="btn btn-primary">Submit Request</button
+            ><br /><br />
             <br />
             <br />
           </div>
