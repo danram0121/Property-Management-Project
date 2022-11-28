@@ -163,14 +163,17 @@
 
           <!-- Header Properties Shared with User -->
           <div id="sharedWithFields">
-            <div class="container-fluid d-flex border-bottom mt-4">
-              <h4 class="w-100 d-flex">Below is a list of the properties that are shared with you</h2>
+            <div class="container-fluid d-flex border-bottom  mt-4">
+              <h4 class="w-100 d-flex">Below is a list of the properties that you are sharing</h2>
               <div class="flex-shrink-0">
-                <button id="btnViewPropertySharedWith" class="btn btn-secondary mb-2">List Property Shared With You <i class="ms-2 fa fa-list"></i></button>
+                <!-- List Shared Property -->
+                <button id="btnViewPropertySharedWith" class="btn btn-secondary mb-2">
+                  List Property Shared With You <i class="ms-2 fa fa-list"></i>
+                </button>
               </div>
             </div>
-            <div  id="propertySharedWithList" name="propertySharedWithList" ></div>
-            <br />
+            <div  id="propertySharedWithList" name="propertySharedWithList"></div>
+            <br>
             <label for="updateSharedPropertyID" class="label">Enter Shared Property ID to Update: </label>
             <input
               type="text"
