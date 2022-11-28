@@ -174,7 +174,8 @@ webSqlApp = {
                             "<b> Property Owner: </b>" +
                             results.rows.item(i).username +
                             "<b> Property Name: </b>" +
-                            results.rows.item(i).propertyName + "<br>";
+                            results.rows.item(i).propertyName +
+                            "\n<br>";
                           }
                         }
                     });
@@ -196,7 +197,7 @@ webSqlApp = {
                             results.rows.item(i).id +
                             "<b> Property Name: </b>" +
                             results.rows.item(i).propertyName +
-                            "<br>";
+                            "\n<br>";
                           }
                         }
                     });
@@ -230,7 +231,7 @@ webSqlApp = {
                             results.rows.item(i).id +
                             "<b> With </b>" +
                             results.rows.item(i).sharedUser +
-                            "<br>";
+                            "\n<br>";
                           }
                         }
                     });
@@ -283,7 +284,7 @@ webSqlApp = {
                           "<b> is Sharing Property ID: </b>" +
                           results.rows.item(i).id +
                           "<b> with You</b>" +
-                          "<br>";
+                          "\n<br>";
                         }
                       }
                   });
@@ -298,7 +299,7 @@ webSqlApp = {
         t.executeSql('SELECT * FROM sessionUser',
             [],
             function (transaction, results) {
-              if(results.rows.item(i).userType.localeCompare('ADMIN') == 0){
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
                 t.executeSql('SELECT * FROM shareAccess',
                     [],
                     function (transaction, results) {
@@ -313,7 +314,7 @@ webSqlApp = {
                             results.rows.item(i).username +
                             "<b> is Sharing Account Access with </b>" +
                             results.rows.item(i).sharedUser +
-                            "<br>";
+                            "\n<br>";
                           }
                         }
                     });
@@ -330,7 +331,7 @@ webSqlApp = {
                           for (let i = 0; i < results.rows.length; i++) {
                             document.getElementById('shareAccessList').innerHTML +=
                             results.rows.item(i).sharedUser +
-                            "<br>";
+                            "\n<br>";
                           }
                         }
                     });
@@ -649,11 +650,17 @@ webSqlApp = {
           return textFile;
         };
 
+        document.getElementById('textbox').value = document.getElementById('propertyList').textContent +
+        document.getElementById('sharedPropertyList').textContent +
+        document.getElementById('propertySharedWithList').textContent;
+        var create = document.getElementById('btnWriteFile'),
           textbox = document.getElementById('textbox');
 
+        //create.addEventListener('click', function () {
           var link = document.getElementById('downloadlink');
           link.href = makeTextFile(textbox.value);
           link.style.display = 'block';
+        //}, false);
       }
 };
 
@@ -750,8 +757,8 @@ function indexOnLoad(){
   } catch (error) {
       console.log('Table already exists')
   }
-  webSqlApp.register('admin', 'pass', 'pass', 'ADMIN', '', 'ADMIN');
-  webSqlApp.logout();
+  setTimeout(() => {  webSqlApp.register('admin', 'pass', 'pass', 'ADMIN', '', 'ADMIN'); }, 1000);
+  setTimeout(() => {  webSqlApp.logout(); }, 1000);
 };
 
 function aboutOnLoad(){
@@ -782,6 +789,9 @@ function privacyOnLoad(){
         [],
         function (transaction, results) {
              document.getElementById('loginFullName').innerHTML = results.rows.item(0).userFullName;
+             if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+               document.getElementById('shareAccessFields').style.display = "none";
+             }
         });
   }, webSqlApp.onError, webSqlApp.onSuccess("No Error"));
   document.getElementById('btnShareAccess').addEventListener('click', function () {
@@ -791,6 +801,9 @@ function privacyOnLoad(){
   document.getElementById('btnRemoveAccess').addEventListener('click', function () {
     var sharedUser = document.getElementById('emailRemoveAccess').value;
     webSqlApp.removeAccess(sharedUser);
+  });
+  document.getElementById('btnViewShareAccess').addEventListener('click', function () {
+      webSqlApp.viewShareAccess();
   });
 };
 
