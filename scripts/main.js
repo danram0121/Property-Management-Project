@@ -2,11 +2,11 @@ var webSqlApp = webSqlApp || {};
 webSqlApp = {
 
 //______Session______
-    setSession: function (name, fullName) {
+    setSession: function (name, fullName, userType) {
       var db = this.openDb('2.0');
       db.transaction(function (t) {
-        t.executeSql('INSERT INTO sessionUser(username, userFullName) VALUES(?, ?)',
-            [name, fullName],
+        t.executeSql('INSERT INTO sessionUser(username, userFullName, userType) VALUES(?, ?, ?)',
+            [name, fullName, userType],
             function (transaction, results) {
                 console.log('Logged In');
             });
@@ -43,37 +43,46 @@ webSqlApp = {
 
         function createTables(transaction) {
             transaction.executeSql("CREATE TABLE IF NOT EXISTS login(" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "username TEXT UNIQUE, " +
-                "password TEXT)"
+                "username VARCHAR(50) PRIMARY KEY, " +
+                "password VARCHAR(50))"
             );
             transaction.executeSql("CREATE TABLE IF NOT EXISTS userInfo(" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "username TEXT UNIQUE, " +
-                "firstName TEXT, " +
-                "lastName TEXT)"
+                "username VARCHAR(50) PRIMARY KEY, " +
+                "firstName VARCHAR(50), " +
+                "lastName VARCHAR(50), " +
+                "userType VARCHAR(50))"
             );
             transaction.executeSql("CREATE TABLE IF NOT EXISTS sessionUser(" +
-                "username TEXT PRIMARY KEY, " +
-                "userFullName TEXT)"
+                "username VARCHAR(50) PRIMARY KEY, " +
+                "userFullName VARCHAR(50), " +
+                "userType VARCHAR(50))"
             );
             transaction.executeSql("CREATE TABLE IF NOT EXISTS property(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "username TEXT, " +
-                "propertyName TEXT)"
+                "username VARCHAR(50), " +
+                "propertyName VARCHAR(50))"
+            );
+            transaction.executeSql("CREATE TABLE IF NOT EXISTS shareAccess(" +
+                "username VARCHAR(50) PRIMARY KEY, " +
+                "sharedUser VARCHAR(50))"
             );
             transaction.executeSql("CREATE TABLE IF NOT EXISTS propertyShared(" +
                 "id INTEGER PRIMARY KEY, " +
-                "username TEXT, " +
-                "propertyName TEXT, " +
-                "sharedUser TEXT)"
+                "username VARCHAR(50), " +
+                "sharedUser VARCHAR(50))"
+            );
+            transaction.executeSql("CREATE TABLE IF NOT EXISTS submitRequest(" +
+                "id INTEGER PRIMARY KEY, " +
+                "username VARCHAR(50), " +
+                "propertyName VARCHAR(50), " +
+                "status VARCHAR(50))"
             );
         }
 
 
     },
 
-    register: function (username, password, con_password, firstName, lastName) {
+    register: function (username, password, con_password, firstName, lastName, userType) {
         var db = this.openDb('2.0');
         db.transaction(function (t) {
             t.executeSql('SELECT * FROM login WHERE username = ?',
@@ -81,25 +90,25 @@ webSqlApp = {
                 function (transaction, results) {
                     if(results.rows.length == 0){
                       if(password.localeCompare(con_password)!=0){
-                        document.getElementById('output').innerHTML = "Passwords do not match.";
+                        alert("Passwords do not Match");
                         return;
                       }
                       else{
                         t.executeSql('INSERT INTO login(username, password) VALUES(?, ?)',
                             [username, password],
                             function (transaction, results) {
-                                console.log('Inserted Id:', results.insertId);
                             });
-                        t.executeSql('INSERT INTO userInfo(username, firstName, lastName) VALUES(?, ?, ?)',
-                            [username, firstName, lastName],
+                        t.executeSql('INSERT INTO userInfo(username, firstName, lastName, userType) VALUES(?, ?, ?, ?)',
+                            [username, firstName, lastName, userType],
                             function (transaction, results) {
-                                console.log('Inserted Id:', results.insertId);
                             });
                         window.location.replace("../common/login.html");
                       }
                     }
-                    else {
-                      document.getElementById('output').innerHTML = "Username/Email already exists";
+                    else if (userType.localeCompare('ADMIN') == 0){
+                    }
+                    else{
+                      alert("Account with that Email Already Exists");
                     }
                 });
         }, this.onError, this.onSuccess("No Error"));
@@ -114,21 +123,21 @@ webSqlApp = {
                 [username],
                 function (transaction, results) {
                     if(results.rows.length == 0){
-                      document.getElementById('output').innerHTML = "Username/Password is incorrect";
+                      alert("Email or Password is Incorrect");
                     }
                     else if(results.rows.item(0).password.localeCompare(password) == 0){
-                      document.getElementById('output').innerHTML = "Login Successful";
                       t.executeSql('SELECT * FROM userInfo WHERE username = ?',
                           [username],
                           function (transaction, results) {
                             sessName = results.rows.item(0).username;
                             sessFullName = results.rows.item(0).firstName + " " + results.rows.item(0).lastName;
-                            webSqlApp.setSession(sessName, sessFullName);
+                            sessUserType = results.rows.item(0).userType;
+                            webSqlApp.setSession(sessName, sessFullName, sessUserType);
                             setTimeout(() => { window.location.replace("../common/dashboard.html"); }, 1000);
                       });
                     }
                     else{
-                      document.getElementById('output').innerHTML = "Username/Password is incorrect";
+                      alert("Email or Password is Incorrect");
                     }
                 });
         }, this.onError, this.onSuccess("No Error"));
@@ -148,20 +157,50 @@ webSqlApp = {
         t.executeSql('SELECT * FROM sessionUser',
             [],
             function (transaction, results) {
-              username = results.rows.item(0).username;
-              t.executeSql('SELECT * FROM property WHERE username = ?',
-                  [username],
-                  function (transaction, results) {
-                      if(results.rows.length == 0){
-                        alert("You have no Properties Saved");
-                      }
-                      else{
-                        document.getElementById('propertyList').innerHTML = "";
-                        for (let i = 0; i < results.rows.length; i++) {
-                          document.getElementById('propertyList').innerHTML += results.rows.item(i).id + " " + results.rows.item(i).propertyName + "<br>";
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM property',
+                    [],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          alert("No Properties Saved");
                         }
-                      }
-                  });
+                        else{
+                          document.getElementById('propertyList').innerHTML = "";
+
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('propertyList').innerHTML +=
+                            "<b>Property ID: </b>" +
+                            results.rows.item(i).id +
+                            "<b> Property Owner: </b>" +
+                            results.rows.item(i).username +
+                            "<b> Property Name: </b>" +
+                            results.rows.item(i).propertyName + "<br>";
+                          }
+                        }
+                    });
+              }
+              else{
+                username = results.rows.item(0).username;
+                t.executeSql('SELECT * FROM property WHERE username = ?',
+                    [username],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          alert("You have no Properties Saved");
+                        }
+                        else{
+                          document.getElementById('propertyList').innerHTML = "";
+
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('propertyList').innerHTML +=
+                            "<b>Property ID: </b>" +
+                            results.rows.item(i).id +
+                            "<b> Property Name: </b>" +
+                            results.rows.item(i).propertyName +
+                            "<br>";
+                          }
+                        }
+                    });
+                }
               });
       }, this.onError, this.onSuccess("No Error"));
     },
@@ -173,21 +212,51 @@ webSqlApp = {
         t.executeSql('SELECT * FROM sessionUser',
             [],
             function (transaction, results) {
-              username = results.rows.item(0).username;
-              t.executeSql('SELECT * FROM propertyShared WHERE username = ?',
-                  [username],
-                  function (transaction, results) {
-                      if(results.rows.length == 0){
-                        alert("You are not Sharing Any Properties");
-                      }
-                      else{
-                        document.getElementById('sharedPropertyList').innerHTML = "";
-                        for (let i = 0; i < results.rows.length; i++) {
-                          document.getElementById('sharedPropertyList').innerHTML += results.rows.item(i).id + " " + results.rows.item(i).propertyName + "<br>";
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM propertyShared',
+                    [],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          alert("No Properties Shared");
                         }
-                      }
-                  });
-              });
+                        else{
+                          document.getElementById('propertyList').innerHTML = "";
+
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('propertyList').innerHTML +=
+                            "<b>User </b>" +
+                            results.rows.item(i).username +
+                            "<b> is Sharing Property ID: </b>" +
+                            results.rows.item(i).id +
+                            "<b> With </b>" +
+                            results.rows.item(i).sharedUser +
+                            "<br>";
+                          }
+                        }
+                    });
+              }
+              else{
+                username = results.rows.item(0).username;
+                t.executeSql('SELECT * FROM propertyShared WHERE username = ?',
+                    [username],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          alert("You are not Sharing Any Properties");
+                        }
+                        else{
+                          document.getElementById('sharedPropertyList').innerHTML = "";
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('sharedPropertyList').innerHTML +=
+                            "<b>You are Sharing Property ID: </b>" +
+                            results.rows.item(i).id +
+                            "<b> With </b>" +
+                            results.rows.item(i).sharedUser +
+                            "<br>";
+                          }
+                        }
+                    });
+                  }
+                });
       }, this.onError, this.onSuccess("No Error"));
     },
 
@@ -208,11 +277,65 @@ webSqlApp = {
                       else{
                         document.getElementById('propertySharedWithList').innerHTML = "";
                         for (let i = 0; i < results.rows.length; i++) {
-                          document.getElementById('propertySharedWithList').innerHTML += results.rows.item(i).id + " " + results.rows.item(i).propertyName + "<br>";
+                          document.getElementById('propertySharedWithList').innerHTML +=
+                          "<b>User </b>" +
+                          results.rows.item(i).username +
+                          "<b> is Sharing Property ID: </b>" +
+                          results.rows.item(i).id +
+                          "<b> with You</b>" +
+                          "<br>";
                         }
                       }
                   });
               });
+      }, this.onError, this.onSuccess("No Error"));
+    },
+
+    viewShareAccess: function(){
+      var username;
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              if(results.rows.item(i).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM shareAccess',
+                    [],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          alert("No Accounts are Sharing Access");
+                        }
+                        else{
+                          document.getElementById('shareAccessList').innerHTML = "";
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('shareAccessList').innerHTML +=
+                            "<b>User </b>" +
+                            results.rows.item(i).username +
+                            "<b> is Sharing Account Access with </b>" +
+                            results.rows.item(i).sharedUser +
+                            "<br>";
+                          }
+                        }
+                    });
+              }
+              else{
+                t.executeSql('SELECT * FROM shareAccess',
+                    [],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          alert("You are not Sharing Account Access");
+                        }
+                        else{
+                          document.getElementById('shareAccessList').innerHTML = "";
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('shareAccessList').innerHTML +=
+                            results.rows.item(i).sharedUser +
+                            "<br>";
+                          }
+                        }
+                    });
+              }
+            });
       }, this.onError, this.onSuccess("No Error"));
     },
 
@@ -235,27 +358,169 @@ webSqlApp = {
     },
 
     updateProperty: function(newPropertyName, propertyID){
+      if(propertyID.localeCompare(null) == 0){
+        alert("Enter a Property ID");
+      }
       var db = this.openDb('2.0');
       db.transaction(function (t) {
-          t.executeSql('UPDATE property SET propertyName = ? WHERE id = ?',
-              [newPropertyName, propertyID]);
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM property WHERE id = ?',
+                    [propertyID],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("Property With ID Does Not Exist");
+                      }
+                      else{
+                        t.executeSql('UPDATE property SET propertyName = ? WHERE id = ?',
+                            [newPropertyName, propertyID]);
+                        alert("Property Successfully Updated");
+                      }
+                    });
+              }
+              else{
+                username = results.rows.item(0).username;
+                t.executeSql('SELECT * FROM property WHERE username = ? AND id = ?',
+                    [username, propertyID],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("You Do Not Own This Property");
+                      }
+                      else{
+                        t.executeSql('UPDATE property SET propertyName = ? WHERE id = ?',
+                            [newPropertyName, propertyID]);
+                        alert("Property Successfully Updated");
+                      }
+                    });
+                }
+                });
       }, this.onError, this.onSuccess('No Error'));
-      db.transaction(function (t) {
-          t.executeSql('UPDATE propertyShared SET propertyName = ? WHERE id = ?',
-              [newPropertyName, propertyID]);
-      }, this.onError, this.onSuccess('No Error'));
-      alert("Property Successfully Updated");
     },
 
     deleteProperty: function(propertyID){
       var db = this.openDb('2.0');
       db.transaction(function (t) {
-          t.executeSql('DELETE FROM property WHERE id = ?', [propertyID]);
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM property WHERE id = ?',
+                    [propertyID],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("Property does not Exist");
+                      }
+                      else{
+                        t.executeSql('DELETE FROM property WHERE id = ?',
+                            [propertyID]);
+                        alert("Property Successfully Deleted");
+                      }
+                    });
+              }
+              else{
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM property WHERE username = ? AND id = ?',
+                  [username, propertyID],
+                  function (transaction, results) {
+                    if(results.rows.length == 0){
+                      alert("You Do Not Own This Property");
+                    }
+                    else{
+                      t.executeSql('DELETE FROM property WHERE username = ? AND id = ?',
+                          [username, propertyID]);
+                      alert("Property Successfully Deleted");
+                    }
+                  });
+              }
+            });
       }, this.onError, this.onSuccess('NoError'));
       db.transaction(function (t) {
-          t.executeSql('DELETE FROM propertyShared WHERE id = ?', [propertyID]);
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+                t.executeSql('SELECT * FROM property WHERE id = ?',
+                    [propertyID],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("Property does not Exist");
+                      }
+                      else{
+                        t.executeSql('DELETE FROM property WHERE id = ?',
+                            [propertyID]);
+                        alert("Property Successfully Deleted");
+                      }
+                    });
+              }
+              else{
+                username = results.rows.item(0).username;
+                t.executeSql('SELECT * FROM propertyShared WHERE username = ? AND id = ?',
+                    [username, propertyID],
+                    function (transaction, results) {
+                      if(results.rows.length == 0){
+                        alert("Property Not Shared");
+                      }
+                      else{
+                        t.executeSql('DELETE FROM propertyShared WHERE username = ? AND id = ?',
+                            [username, propertyID]);
+                        alert("Shared Property Successfully Deleted");
+                      }
+                    });
+                  }
+                });
       }, this.onError, this.onSuccess('NoError'));
-      alert("Property Successfully Deleted");
+    },
+
+    shareAccess: function(sharedUser){
+      var username;
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM userInfo WHERE username = ?',
+                  [sharedUser],
+                  function (transaction, results) {
+                    if(results.rows.length == 0){
+                      alert("User does not Exist");
+                    }
+                    else{
+                      t.executeSql('INSERT INTO shareAccess(username, sharedUser) VALUES(?, ?)',
+                          [username, sharedUser],
+                          function (transaction, results) {
+                        });
+                        alert("Sharing Account Access with New User");
+                    }
+                  });
+            });
+      }, this.onError, this.onSuccess("No Error"));
+    },
+
+    removeAccess: function(sharedUser){
+      var username;
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM shareAccess WHERE username = ? AND sharedUser = ?',
+                  [username, sharedUser],
+                  function (transaction, results) {
+                    if(results.rows.length == 0){
+                      alert("You are not Sharing Account Access with User");
+                    }
+                    else{
+                      t.executeSql('DELETE FROM shareAccess WHERE username = ? AND sharedUser = ?', [username, sharedUser]);
+                      t.executeSql('DELETE FROM propertyShared WHERE username = ? AND sharedUser = ?', [username, sharedUser]);
+                      alert("Shared Access Removed and All Shared Property Removed");
+                    }
+                  });
+            });
+      }, this.onError, this.onSuccess("No Error"));
     },
 
     shareProperty: function(propertyID, sharedUser){
@@ -270,17 +535,24 @@ webSqlApp = {
                   [propertyID, username],
                   function (transaction, results) {
                     if(results.rows.length == 0){
-                      alert("You do not own that Property or it does not Exist");
+                      alert("You do not Own this Property");
                     }
                     else{
-                      username = results.rows.item(0).username;
-                      propertyName = results.rows.item(0).propertyName;
-                      t.executeSql('INSERT INTO propertyShared(id, username, propertyName, sharedUser) VALUES(?, ?, ?, ?)',
-                          [propertyID, username, propertyName, sharedUser],
+                      t.executeSql('SELECT * FROM shareAccess WHERE username = ? and sharedUser = ?',
+                          [username, sharedUser],
                           function (transaction, results) {
-                              console.log('Inserted Id:', results.insertId);
-                        });
-                      alert("Property Successfully Shared");
+                            if(results.rows.length == 0){
+                              alert("You are not Sharing Account Access with User");
+                            }
+                            else{
+                              t.executeSql('INSERT INTO propertyShared(id, username, sharedUser) VALUES(?, ?, ?)',
+                                  [propertyID, username, sharedUser],
+                                  function (transaction, results) {
+                                      console.log('Inserted Id:', results.insertId);
+                                });
+                                alert("Property Successfully Shared");
+                            }
+                          });
                     }
                   });
             });
@@ -290,18 +562,99 @@ webSqlApp = {
     updateSharedProperty: function(newPropertyName, propertyID){
       var db = this.openDb('2.0');
       db.transaction(function (t) {
-          t.executeSql('UPDATE propertyShared SET propertyName = ? WHERE id = ?',
-              [newPropertyName, propertyID]);
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM propertyShared WHERE id = ? AND sharedUser = ?',
+                  [propertyID, username],
+                  function (transaction, results) {
+                    if(results.rows.length == 0){
+                      alert("This Property is not Shared with You");
+                    }
+                    else{
+                      t.executeSql('UPDATE property SET propertyName = ? WHERE id = ?',
+                          [newPropertyName, propertyID]);
+                      alert("Shared Property Successfully Updated");
+                    }
+                  });
+            });
       }, this.onError, this.onSuccess('No Error'));
     },
 
     deleteSharedProperty: function(propertyID){
       var db = this.openDb('2.0');
       db.transaction(function (t) {
-          t.executeSql('DELETE FROM propertyShared WHERE id = ?', [propertyID]);
-
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM propertyShared WHERE id = ? AND sharedUser = ?',
+                  [propertyID, username],
+                  function (transaction, results) {
+                    if(results.rows.length == 0){
+                      alert("This Property is not Shared with You");
+                    }
+                    else{
+                      t.executeSql('DELETE FROM propertyShared WHERE id = ?', [propertyID]);
+                      t.executeSql('DELETE FROM property WHERE id = ?', [propertyID]);
+                      alert("Shared Property Successfully Deleted");
+                    }
+                  });
+            });
       }, this.onError, this.onSuccess('NoError'));
-    }
+    },
+
+    changePassword: function(currentPassword, password, con_password){
+      var db = this.openDb('2.0');
+      db.transaction(function (t) {
+        t.executeSql('SELECT * FROM sessionUser',
+            [],
+            function (transaction, results) {
+              username = results.rows.item(0).username;
+              t.executeSql('SELECT * FROM login WHERE username = ?',
+                  [username],
+                  function (transaction, results) {
+                    if(currentPassword.localeCompare(results.rows.item(0).password) == 0){
+                      if(password.localeCompare(con_password) != 0){
+                        alert("Passwords do not Match");
+                      }
+                      else{
+                        t.executeSql('UPDATE login SET password = ? WHERE username = ?',
+                            [password, username]);
+                        alert("Password Successfully Updated");
+                      }
+                    }
+                    else{
+                      alert("Wrong Password");
+                    }
+                  });
+            });
+      }, this.onError, this.onSuccess('NoError'));
+    },
+
+    writeFile: function(){
+      var textFile = null,
+        makeTextFile = function (text) {
+          var data = new Blob([text], {type: 'text/plain'});
+
+          // If we are replacing a previously generated file we need to
+          // manually revoke the object URL to avoid memory leaks.
+          if (textFile !== null) {
+            window.URL.revokeObjectURL(textFile);
+          }
+
+          textFile = window.URL.createObjectURL(data);
+
+          return textFile;
+        };
+
+          textbox = document.getElementById('textbox');
+
+          var link = document.getElementById('downloadlink');
+          link.href = makeTextFile(textbox.value);
+          link.style.display = 'block';
+      }
 };
 
 //Page Specific Features
@@ -323,7 +676,7 @@ function registerOnLoad() {
       var con_password = document.getElementById('con_password').value;
       var firstName = document.getElementById('firstName').value;
       var lastName = document.getElementById('lastName').value;
-      webSqlApp.register(username, password, con_password, firstName, lastName);
+      webSqlApp.register(username, password, con_password, firstName, lastName, 'USER');
   });
 };
 
@@ -334,6 +687,11 @@ function dashboardOnLoad() {
         [],
         function (transaction, results) {
              document.getElementById('loginFullName').innerHTML = results.rows.item(0).userFullName;
+             if(results.rows.item(0).userType.localeCompare('ADMIN') == 0){
+               document.getElementById('addPropertyFields').style.display = "none";
+               document.getElementById('shareFields').style.display = "none";
+               document.getElementById('sharedWithFields').style.display = "none";
+             }
         });
   }, webSqlApp.onError, webSqlApp.onSuccess("No Error"));
   document.getElementById('btnViewProperty').addEventListener('click', function () {
@@ -342,6 +700,9 @@ function dashboardOnLoad() {
   document.getElementById('btnAddProperty').addEventListener('click', function () {
       var propertyName = document.getElementById('propertyName').value;
       webSqlApp.addProperty(propertyName);
+  });
+  document.getElementById('btnWriteFile').addEventListener('click', function () {
+      webSqlApp.writeFile();
   });
   document.getElementById('btnUpdateProperty').addEventListener('click', function () {
       var updatePropertyID = document.getElementById('updatePropertyID').value;
@@ -389,6 +750,7 @@ function indexOnLoad(){
   } catch (error) {
       console.log('Table already exists')
   }
+  webSqlApp.register('admin', 'pass', 'pass', 'ADMIN', '', 'ADMIN');
   webSqlApp.logout();
 };
 
@@ -400,19 +762,51 @@ function contactOnLoad(){
   webSqlApp.logout();
 };
 
+function personalOnLoad(){
+  var db = webSqlApp.openDb('2.0');
+  db.transaction(function (t) {
+    t.executeSql('SELECT * FROM sessionUser',
+        [],
+        function (transaction, results) {
+            document.getElementById('loginScreenFullName').innerHTML = results.rows.item(0).userFullName;
+             document.getElementById('loginFullName').innerHTML = results.rows.item(0).userFullName;
+             document.getElementById('loginEmail').innerHTML = results.rows.item(0).username;
+        });
+  }, webSqlApp.onError, webSqlApp.onSuccess("No Error"));
+};
 
-function password_show_hide() {
-  var x = document.getElementById("password");
-  var show_eye = document.getElementById("show_eye");
-  var hide_eye = document.getElementById("hide_eye");
-  hide_eye.classList.remove("d-none");
-  if (x.type === "password") {
-    x.type = "text";
-    show_eye.style.display = "none";
-    hide_eye.style.display = "block";
-  } else {
-    x.type = "password";
-    show_eye.style.display = "block";
-    hide_eye.style.display = "none";
-  }
-}
+function privacyOnLoad(){
+  var db = webSqlApp.openDb('2.0');
+  db.transaction(function (t) {
+    t.executeSql('SELECT * FROM sessionUser',
+        [],
+        function (transaction, results) {
+             document.getElementById('loginFullName').innerHTML = results.rows.item(0).userFullName;
+        });
+  }, webSqlApp.onError, webSqlApp.onSuccess("No Error"));
+  document.getElementById('btnShareAccess').addEventListener('click', function () {
+      var sharedUser = document.getElementById('emailShareAccess').value;
+      webSqlApp.shareAccess(sharedUser);
+  });
+  document.getElementById('btnRemoveAccess').addEventListener('click', function () {
+    var sharedUser = document.getElementById('emailRemoveAccess').value;
+    webSqlApp.removeAccess(sharedUser);
+  });
+};
+
+function securityOnLoad(){
+  var db = webSqlApp.openDb('2.0');
+  db.transaction(function (t) {
+    t.executeSql('SELECT * FROM sessionUser',
+        [],
+        function (transaction, results) {
+             document.getElementById('loginFullName').innerHTML = results.rows.item(0).userFullName;
+        });
+  }, webSqlApp.onError, webSqlApp.onSuccess("No Error"));
+  document.getElementById('btnChangePassword').addEventListener('click', function () {
+      var currentPassword = document.getElementById('currentPassword').value;
+      var password = document.getElementById('password').value;
+      var con_password = document.getElementById('con_password').value;
+      webSqlApp.changePassword(currentPassword, password, con_password);
+  });
+};
