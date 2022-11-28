@@ -648,10 +648,10 @@ webSqlApp = {
                       alert("You do not Own this Property");
                     }
                     else{
-                      propertyName = results.rows.items(0).propertyName;
+                      propertyName = results.rows.item(0).propertyName;
                       status = "Pending";
                       t.executeSql('INSERT INTO submitRequest(id, username, propertyName, status) VALUES(?, ?, ?, ?)',
-                          [propertyID, username, sharedUser, status],
+                          [propertyID, username, propertyName, status],
                           function (transaction, results) {
                         });
                       alert("Request Submitted");
@@ -678,7 +678,7 @@ webSqlApp = {
                         document.getElementById('viewRequests').innerHTML = "";
                         for (let i = 0; i < results.rows.length; i++) {
                           document.getElementById('viewRequests').innerHTML +=
-                          "<b>User <\b>" +
+                          "<b>User </b>" +
                           results.rows.item(i).username +
                           "<b> Submitted Request for Property ID </b>" +
                           results.rows.item(i).id +
@@ -810,6 +810,10 @@ function dashboardOnLoad() {
                document.getElementById('addPropertyFields').style.display = "none";
                document.getElementById('shareFields').style.display = "none";
                document.getElementById('sharedWithFields').style.display = "none";
+               document.getElementById('submitRequestField').style.display = "none";
+             }
+             else{
+               document.getElementById('acceptRequestField').style.display = "none";
              }
         });
   }, webSqlApp.onError, webSqlApp.onSuccess("No Error"));
@@ -851,6 +855,17 @@ function dashboardOnLoad() {
   });
   document.getElementById('btnViewPropertySharedWith').addEventListener('click', function () {
       webSqlApp.viewPropertySharedWith();
+  });
+  document.getElementById('btnSubmitRequest').addEventListener('click', function () {
+      var propertyID = document.getElementById('requestID').value;
+      webSqlApp.submitRequest(propertyID);
+  });
+  document.getElementById('btnViewRequests').addEventListener('click', function () {
+      webSqlApp.viewRequests();
+  });
+  document.getElementById('btnAcceptRequest').addEventListener('click', function () {
+      var propertyID = document.getElementById('acceptRequestID').value;
+      webSqlApp.acceptRequest(propertyID);
   });
 };
 
