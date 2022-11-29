@@ -332,13 +332,31 @@ webSqlApp = {
                     function (transaction, results) {
                         if(results.rows.length == 0){
                           document.getElementById('shareAccessList').innerHTML = "";
-                          alert("You are not Sharing Account Access");
+                          alert("Users are not Sharing Account Access with You");
                         }
                         else{
                           document.getElementById('shareAccessList').innerHTML = "";
                           for (let i = 0; i < results.rows.length; i++) {
                             document.getElementById('shareAccessList').innerHTML +=
                             results.rows.item(i).username +
+                            "<b> is Sharing Account Access with You </b>" +
+                            "\n<br>";
+                          }
+                        }
+                    });
+                t.executeSql('SELECT * FROM shareAccess WHERE username = ?',
+                    [username],
+                    function (transaction, results) {
+                        if(results.rows.length == 0){
+                          document.getElementById('shareAccessList').innerHTML = "";
+                          alert("You are not Sharing Account Access");
+                        }
+                        else{
+                          document.getElementById('shareAccessList').innerHTML = "";
+                          for (let i = 0; i < results.rows.length; i++) {
+                            document.getElementById('shareAccessList').innerHTML +=
+                            "<b>You are Sharing Account Access with </b>" +
+                            results.rows.item(i).sharedUser +
                             "\n<br>";
                           }
                         }
